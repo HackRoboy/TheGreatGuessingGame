@@ -49,6 +49,7 @@ task :test => :gen do
 end
 
 task :game => :gen do
+  puts "Command: #{run_command}"
   ENV['command'] = run_command
   ENV['PYTHONPATH'] = 'src'
   
