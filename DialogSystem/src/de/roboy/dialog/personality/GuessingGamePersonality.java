@@ -22,6 +22,7 @@ public class GuessingGamePersonality implements Personality{
 			state = GuessingGameState.REGISTER_GROUP_A;
 			return result;
 		case REGISTER_GROUP_A:
+			
 			result.add(new SpeechAction("Group 1, please tell me the name of your group."));
 			state = GuessingGameState.GROUP_B_SENTENCE_INPUT;
 			return result;
