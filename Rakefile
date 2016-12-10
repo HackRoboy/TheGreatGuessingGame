@@ -16,7 +16,7 @@ task run: 'DialogSystem/DialogSystem.jar' do
 end
 
 def run_command()
-  "#{ENV['JAVA_HOME']}/bin/java -cp DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem"    
+  "#{ENV['JAVA_HOME']}/bin/java -cp DialogSystem:DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem"
 end
 
 file 'DialogSystem/DialogSystem.jar' do
@@ -32,5 +32,8 @@ desc 'Tests the Application'
 task :test => :build do
   ENV['sut'] = run_command
  
-  sh 'behave test'
+  options = []
+  options << '--stop' if ENV['stop']
+  options << '--tags ~skip'
+  sh "behave #{options * ' '} test"
 end
