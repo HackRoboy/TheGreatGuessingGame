@@ -3,7 +3,8 @@ require 'rake/testtask'
 task default: :build
 
 desc 'Builds the App.'
-task build: 'DialogSystem/DialogSystem.jar'
+task gen: 'DialogSystem/DialogSystem.jar'
+task gen: 'build/extraction.weights'
 
 task :format do
   options = []
@@ -19,6 +20,13 @@ def run_command()
   "#{ENV['JAVA_HOME']}/bin/java -cp DialogSystem:DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem"
 end
 
+directory 'build'
+
+file 'build/extraction.weights' => 'build'
+file 'build/extraction.weights' do
+  sh "curl -O http://pjreddie.com/media/files/extraction.weights --output build/extraction.weights"  
+end
+
 file 'DialogSystem/DialogSystem.jar' => FileList['DialogSystem/**/*.java'] do
   cd('DialogSystem') do 
     mkdir_p 'package'
@@ -29,11 +37,11 @@ file 'DialogSystem/DialogSystem.jar' => FileList['DialogSystem/**/*.java'] do
 end
 
 desc 'Tests the Application'
-task :test => :build do
+task :test => :gen do
   ENV['sut'] = run_command
  
   options = []
   options << '--stop' if ENV['stop']
   options << '--tags ~skip'
-  sh "behave #{options * ' '} test"
+  sh "PYTHONPATH=src behave #{options * ' '} test"
 end
