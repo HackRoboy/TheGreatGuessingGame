@@ -22,9 +22,11 @@ end
 
 directory 'build'
 
-file 'build/extraction.weights' => 'build'
+file 'build/extraction.weights'
 file 'build/extraction.weights' do
-  sh "curl -O http://pjreddie.com/media/files/extraction.weights --output build/extraction.weights"  
+  mkdir_p 'build'
+  sh "curl -O http://pjreddie.com/media/files/extraction.weights --output extraction.weights"  
+  sh 'mv extraction.weights build'
 end
 
 file 'DialogSystem/DialogSystem.jar' => FileList['DialogSystem/**/*.java'] do
@@ -44,4 +46,12 @@ task :test => :gen do
   options << '--stop' if ENV['stop']
   options << '--tags ~skip'
   sh "PYTHONPATH=src behave #{options * ' '} test"
+end
+
+task :game => :gen do
+  ENV['command'] = run_command
+  ENV['PYTHONPATH'] = 'src'
+  
+  #sh 'PYTHONPATH=src python3 src/roboy/guessing_game.py'
+  sh 'python3 src/roboy/guessing_game.py'
 end
