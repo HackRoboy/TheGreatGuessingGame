@@ -14,4 +14,7 @@ public class ClassificationInput implements Input {
 	public ClassificationInput(HashMap probabilities) {
 		this.probabilities = probabilities;
 	}
+	public HashMap<String, Double> getProbabilities(){
+		return probabilities;
+	}
 }
