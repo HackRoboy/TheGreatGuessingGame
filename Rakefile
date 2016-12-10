@@ -12,14 +12,19 @@ task :format do
 end
 
 task run: 'DialogSystem/DialogSystem.jar' do
-  sh "#{ENV['JAVAHOME']}/bin/java -cp DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem" 
+  sh "#{ENV['JAVA_HOME']}/bin/java -cp DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem" 
 end
 
 file 'DialogSystem/DialogSystem.jar' do
   cd('DialogSystem') do 
     mkdir_p 'package'
     sh 'cp -r resources package'
-    sh "#{ENV['JAVAHOME']}/bin/javac #{FileList['src/**/*.java']} -cp #{FileList['lib/*.jar'].join ':'} -d package"
-    sh "#{ENV['JAVAHOME']}/bin/jar cfm DialogSystem.jar Manifest.txt -C package/ ."
+    sh "#{ENV['JAVA_HOME']}/bin/javac #{FileList['src/**/*.java']} -cp #{FileList['lib/*.jar'].join ':'} -d package"
+    sh "#{ENV['JAVA_HOME']}/bin/jar cfm DialogSystem.jar Manifest.txt -C package/ ."
   end
+end
+
+desc 
+task :test => :build do
+    
 end
