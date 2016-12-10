@@ -28,23 +28,13 @@ public class GuessingGamePersonality implements Personality {
 	private String groupB = "";
 	private String term = "";
 	private HashSet<String> stopWords = new HashSet<String>();
+	private ClassificationInput classification;
+	private SentenceInput sentence;
 
 	@Override
 	public List<Action> answer(Interpretation input) {
 		List<Action> result = new ArrayList<Action>();
-		List<Input> listInput = GsonHelper.decode(input.sentence);
-		SentenceInput sentence = null;
-		ClassificationInput classification = null;
-		if (listInput != null) {
-			for (Input i : listInput) {
-				if (i.getClass() == SentenceInput.class) {
-					// TODO multiple Inputs?
-					sentence = (SentenceInput) i;
-				} else {
-					classification = (ClassificationInput) i;
-				}
-			}
-		}
+		
 		/*
 		 * At the beginning of a state the input for the previous state gets
 		 * processed and if the input is not valid, it repeats this state
@@ -179,6 +169,12 @@ public class GuessingGamePersonality implements Personality {
 		}
 	}
 
+	public void setSentence(SentenceInput sentence){
+		this.sentence = sentence;
+	}
+	public void setClassification(ClassificationInput classification){
+		this.classification = classification;
+	}
 	private void filterSpamWords() {
 		// TODO take out words like 'and', 'or', .. of the sentence and return
 		// the filtered sentence

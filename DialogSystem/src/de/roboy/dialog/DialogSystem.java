@@ -15,12 +15,15 @@ import de.roboy.dialog.personality.GuessingGamePersonality;
 import de.roboy.dialog.personality.KnockKnochPersonality;
 import de.roboy.dialog.personality.Personality;
 import de.roboy.dialog.personality.SmallTalkPersonality;
+import de.roboy.io.ClassificationInput;
 import de.roboy.io.CommandLineCommunication;
 import de.roboy.io.CommandLineInput;
 import de.roboy.io.CommandLineOutput;
 import de.roboy.io.Communication;
+import de.roboy.io.Input;
 import de.roboy.io.InputDevice;
 import de.roboy.io.OutputDevice;
+import de.roboy.io.SentenceInput;
 import de.roboy.linguistics.sentenceanalysis.Analyzer;
 import de.roboy.linguistics.sentenceanalysis.Interpretation;
 import de.roboy.linguistics.sentenceanalysis.SentenceAnalyzer;
@@ -46,7 +49,28 @@ public class DialogSystem {
 			output.act(GsonHelper.encode(actions));
 			raw = input.listen();
 			//TODO raw is in json -> only interpret "text:"
-			interpretation = analyzer.analyze(raw);
+			List<Input> listInput = GsonHelper.decode(raw);
+			SentenceInput sentence = null;
+			ClassificationInput classification = null;
+			if (listInput != null) {
+				for (Input i : listInput) {
+					if (i.getClass() == SentenceInput.class) {
+						// TODO multiple Inputs?
+						sentence = (SentenceInput) i;
+					} else {
+						classification = (ClassificationInput) i;
+					}
+				}
+			}
+			if(sentence == null){
+				continue;
+			}
+			interpretation = analyzer.analyze(sentence.getInput());
+			if (p.getClass() == GuessingGamePersonality.class) {
+				((GuessingGamePersonality) p).setClassification(classification);
+				((GuessingGamePersonality) p).setSentence(sentence);
+				
+			}
 			actions = p.answer(interpretation);
 		}
 		List<Action> lastwords = ((ShutDownAction)actions.get(0)).getLastWords();
