@@ -22,7 +22,8 @@ public class GuessingGamePersonality implements Personality {
 	}
 
 	private GuessingGameState state = GuessingGameState.WELCOME;
-	private static String groupA, groupB;
+	private static String groupA = "";
+	private static String groupB = "";
 	private static String term = "";
 	private static List<String> stopWords;
 
@@ -53,22 +54,15 @@ public class GuessingGamePersonality implements Personality {
 			return result;
 		case REGISTER_GROUP_B:
 			// save and greet groupA
-			System.out.println(input.sentence);
-			//TODO
-			if (listInput == null) {
+			if (sentence != null) {
 				if (groupA.equals("")) {
-					for (Input in : listInput) {
-						if (in.getClass() == SentenceInput.class) {
-							if (((SentenceInput) in).getInput().length() <= 30) {
-								groupA = input.sentence;
-								result.add(new SpeechAction("Group 1 will now be called " + groupA));
-							} else {
-								result.add(new SpeechAction(
-										"Group 1, the name is too long. Please choose a shorter one."));
-								state = GuessingGameState.REGISTER_GROUP_B;
-								return result;
-							}
-						}
+					if (sentence.getInput().length() <= 30) {
+						groupA = sentence.getInput();
+						result.add(new SpeechAction("Group 1 will now be called " + groupA));
+					} else {
+						result.add(new SpeechAction("Group 1, the name is too long. Please choose a shorter one."));
+						state = GuessingGameState.REGISTER_GROUP_B;
+						return result;
 					}
 				}
 			} else {
@@ -84,20 +78,15 @@ public class GuessingGamePersonality implements Personality {
 
 		case REGISTER_TERM:
 			// save and greet groupB
-			if (listInput != null) {
+			if (sentence != null) {
 				if (groupB.equals("")) {
-					for (Input in : listInput) {
-						if (in.getClass() == SentenceInput.class) {
-							if (((SentenceInput) in).getInput().length() <= 30) {
-								groupB = input.sentence;
-								result.add(new SpeechAction("Group 2 will now be called " + groupB));
-							} else {
-								result.add(new SpeechAction(
-										"Group 2, the name is too long. Please choose a shorter one."));
-								state = GuessingGameState.REGISTER_TERM;
-								return result;
-							}
-						}
+					if (sentence.getInput().length() <= 30) {
+						groupB = sentence.getInput();
+						result.add(new SpeechAction("Group 2 will now be called " + groupB));
+					} else {
+						result.add(new SpeechAction("Group 2, the name is too long. Please choose a shorter one."));
+						state = GuessingGameState.REGISTER_TERM;
+						return result;
 					}
 				}
 			} else {

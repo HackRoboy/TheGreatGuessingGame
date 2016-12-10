@@ -6,4 +6,5 @@ import de.roboy.dialog.action.Action;
 
 public interface OutputDevice {
 	public void act(List<Action> actions);
+	public void act(String output);
 }

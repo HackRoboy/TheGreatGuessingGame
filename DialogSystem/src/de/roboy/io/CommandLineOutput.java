@@ -15,5 +15,8 @@ public class CommandLineOutput implements OutputDevice{
 			}
 		}
 	}
+	public void act(String output){
+		System.out.println(output);
+	}
 
 }

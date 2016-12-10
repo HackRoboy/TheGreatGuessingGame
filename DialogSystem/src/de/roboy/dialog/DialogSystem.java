@@ -1,6 +1,7 @@
 package de.roboy.dialog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonIOException;
@@ -23,6 +24,7 @@ import de.roboy.io.OutputDevice;
 import de.roboy.linguistics.sentenceanalysis.Analyzer;
 import de.roboy.linguistics.sentenceanalysis.Interpretation;
 import de.roboy.linguistics.sentenceanalysis.SentenceAnalyzer;
+import de.roboy.util.GsonHelper;
 
 public class DialogSystem {
 	
@@ -41,7 +43,7 @@ public class DialogSystem {
 		Interpretation interpretation; // = analyzer.analyze(raw);
 		List<Action> actions =  p.answer(new Interpretation(""));
 		while(actions.size()>=1 && !(actions.get(0) instanceof ShutDownAction)){
-			output.act(actions);
+			output.act(GsonHelper.encode(actions));
 			raw = input.listen();
 			//TODO raw is in json -> only interpret "text:"
 			interpretation = analyzer.analyze(raw);

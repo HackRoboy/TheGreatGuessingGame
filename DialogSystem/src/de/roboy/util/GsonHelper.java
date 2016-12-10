@@ -1,6 +1,6 @@
 package de.roboy.util;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -20,7 +20,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class GsonHelper {
-	public static ArrayList<Input> decode(String input) {
+	public static List<Input> decode(String input) {
 		// TODO
 		if(input.equals("")){
 			return null;
@@ -29,7 +29,7 @@ public class GsonHelper {
 		JsonElement jelem = gson.fromJson(input, JsonElement.class);
 		JsonArray jarr = jelem.getAsJsonArray();
 
-		ArrayList<Input> inputList = new ArrayList<Input>();
+		List<Input> inputList = new ArrayList<Input>();
 		for (JsonElement jel : jarr) {
 			if (jel.getAsJsonObject().has("text")) {
 				inputList.add(new SentenceInput(jel.getAsJsonObject().get("text").getAsString()));
@@ -46,7 +46,7 @@ public class GsonHelper {
 		return inputList;
 	}
 
-	public static String encode(ArrayList<Action> actionList) {
+	public static String encode(List<Action> actionList) {
 		// TODO
 		String jsonString;
 		Gson gson = new GsonBuilder().create();
@@ -68,7 +68,7 @@ public class GsonHelper {
 				jarr.add(obj);
 			}
 		}
-		jsonString = jarr.getAsString();
+		jsonString = jarr.toString();
 		return jsonString;
 	}
 }
