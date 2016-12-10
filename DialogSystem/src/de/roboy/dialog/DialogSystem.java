@@ -43,6 +43,7 @@ public class DialogSystem {
 		while(actions.size()>=1 && !(actions.get(0) instanceof ShutDownAction)){
 			output.act(actions);
 			raw = input.listen();
+			//TODO raw is in json -> only interpret "text:"
 			interpretation = analyzer.analyze(raw);
 			actions = p.answer(interpretation);
 		}
