@@ -1,4 +1,4 @@
-from support.roboy import Roboy
+from roboy.roboy import Roboy
 
 
 def before_all(context):

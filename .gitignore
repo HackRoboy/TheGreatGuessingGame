@@ -1,5 +1,7 @@
 package
+src/roboy/__pycache__
 test/support/__pycache__
 DialogSystem/DialogSystem.jar
 DialogSystem/package
-resource
+resources
+

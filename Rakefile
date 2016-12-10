@@ -35,5 +35,5 @@ task :test => :build do
   options = []
   options << '--stop' if ENV['stop']
   options << '--tags ~skip'
-  sh "behave #{options * ' '} test"
+  sh "PYTHONPATH=src behave #{options * ' '} test"
 end
