@@ -7,6 +7,13 @@ class Roboy:
         from subprocess import Popen, PIPE
         self.process = Popen(self.command, stdout=PIPE, stdin=PIPE)
 
+    def stop(self):
+        try:
+            self.process.kill()
+            _, _ = self.process.communicate()
+        except:
+            pass
+
     def read(self):
         return self.process.stdout.readline().decode('utf-8').strip('\n')
 

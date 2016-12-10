@@ -2,16 +2,18 @@ from behave import given, when, then
 from nose.tools import eq_
 
 @when(u'Roboy is started')
-def step_impl(context):
+def start(context):
     context.roboy.start()
 
 @then(u'Roboy says')
-def step_impl(context):
+def says(context):
     eq_(context.text, context.roboy.read())
 
-@when(u'the Roboy welcomed the groups')
+@when(u'the Roboy welcomed everybody')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: When the Roboy welcomed the groups')
+    context.roboy.start()
+    while 'Welcome' not in context.roboy.read():
+        pass
 
 @then(u'Roboy asks for first Group name')
 def step_impl(context):

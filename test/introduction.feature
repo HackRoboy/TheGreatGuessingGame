@@ -4,13 +4,15 @@ Feature: Introduction
     When Roboy is started
     Then Roboy says
       """
-      Welcome to Roboy Guessing Game.
+      Welcome to the Guessing Game with Roboy
       """
 
-  @skip
   Scenario: Roboy Welcomes Groups
-    When the Roboy welcomed the groups
-    Then Roboy asks for first Group name
+    When the Roboy welcomed everybody
+    Then Roboy says
+      """
+      Please tell first Group Name
+      """
 
   @skip
   Scenario:

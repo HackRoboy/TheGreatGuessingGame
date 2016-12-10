@@ -19,10 +19,10 @@ def run_command()
   "#{ENV['JAVA_HOME']}/bin/java -cp DialogSystem:DialogSystem/resources:DialogSystem/DialogSystem.jar:#{FileList['DialogSystem/lib/*.jar'].join ':'} de.roboy.dialog.DialogSystem"
 end
 
-file 'DialogSystem/DialogSystem.jar' do
+file 'DialogSystem/DialogSystem.jar' => FileList['DialogSystem/**/*.java'] do
   cd('DialogSystem') do 
     mkdir_p 'package'
-    sh 'cp -r resources package'
+    sh 'cp -r resources ..'
     sh "#{ENV['JAVA_HOME']}/bin/javac #{FileList['src/**/*.java']} -cp #{FileList['lib/*.jar'].join ':'} -d package"
     sh "#{ENV['JAVA_HOME']}/bin/jar cfm DialogSystem.jar Manifest.txt -C package/ ."
   end
