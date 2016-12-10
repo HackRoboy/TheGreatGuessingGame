@@ -48,7 +48,7 @@ public class GsonHelper {
 
 	public static String encode(ArrayList<Action> actionList) {
 		// TODO
-		String jsonString = "";
+		String jsonString;
 		Gson gson = new GsonBuilder().create();
 		JsonArray jarr = new JsonArray();
 		for(Action action : actionList){
