@@ -10,6 +10,7 @@ import de.roboy.dialog.action.Action;
 import de.roboy.dialog.action.ShutDownAction;
 import de.roboy.dialog.personality.CuriousPersonality;
 import de.roboy.dialog.personality.DefaultPersonality;
+import de.roboy.dialog.personality.GuessingGamePersonality;
 import de.roboy.dialog.personality.KnockKnochPersonality;
 import de.roboy.dialog.personality.Personality;
 import de.roboy.dialog.personality.SmallTalkPersonality;
@@ -29,7 +30,8 @@ public class DialogSystem {
 //		Personality p = new DefaultPersonality();
 //		Personality p = new CuriousPersonality();
 //		Personality p = new KnockKnochPersonality();
-		Personality p = new SmallTalkPersonality();
+//		Personality p = new SmallTalkPersonality();
+		Personality p = new GuessingGamePersonality();
 		
 		InputDevice input = new CommandLineInput();
 		OutputDevice output = new CommandLineOutput();
