@@ -270,7 +270,7 @@ public class GuessingGamePersonality implements Personality {
 																				// insert
 				// pythonscript path
 				// here
-				String message = "message=" + groupA + ": " + String.format("%4.3f", outputEdison) + "|" + groupB
+				String message = "message=" + groupA + ": " + String.format("%4.3f", (probTeamA / POINT_BORDER) + "    |" + groupB
 						+ String.format("%4.3f", (probTeamB / POINT_BORDER)) + "     |";
 				String[] envArgs = new String[2];
 				envArgs[0] = message;
