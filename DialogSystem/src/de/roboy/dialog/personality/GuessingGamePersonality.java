@@ -52,7 +52,7 @@ public class GuessingGamePersonality implements Personality {
 	public List<Action> answer(Interpretation input) {
 		List<Action> result = new ArrayList<Action>();
 		/*
-		 * TODO Emotion cycle At the beginning of a state the input for the
+		 * TODO Emotion cycle; At the beginning of a state the input for the
 		 * previous state gets processed and if the input is not valid, it
 		 * repeats this state
 		 */
@@ -110,7 +110,7 @@ public class GuessingGamePersonality implements Personality {
 				return result;
 			}
 
-			// TODO ask if not first round if they want to continue playing,
+			// ask if not first round if they want to continue playing,
 			// tell current points
 			if (!firstRound) {
 				groupAsTurnFirst = !groupAsTurnFirst;
@@ -202,9 +202,8 @@ public class GuessingGamePersonality implements Personality {
 		case FINALIZE_SETUP:
 			// save the stopwords
 			if (sentence != null) {
-				String[] arr = sentence.getInput().split("\\s+"); // TODO
-																	// regex
-				// the term is also not allowed to say
+				String[] arr = sentence.getInput().split("\\s+");
+				// the term is also not allowed to be said
 				stopWords.add(term);
 				String allStopWords = term;
 				for (int i = 0; i < arr.length; ++i) {
@@ -242,8 +241,8 @@ public class GuessingGamePersonality implements Personality {
 					hintsList.set(i, hintsList.get(i).replaceAll("\\s+|,", ""));
 					if (stopWords.contains(hintsList.get(i).toLowerCase())) {
 						// They used a stopWord
-						result.add(new SpeechAction(
-								groupA + " used " + hintsList.get(i).toLowerCase() + " which is a word that was not allowed. The other team will get a point."));
+						result.add(new SpeechAction(groupA + " used " + hintsList.get(i).toLowerCase()
+								+ " which is a word that was not allowed. The other team will get a point."));
 						result.add(new EmotionAction("sad"));
 						addPoint(GROUP_B);
 						result.add(new SpeechAction("Do you want to play antoher round?"));
@@ -295,8 +294,8 @@ public class GuessingGamePersonality implements Personality {
 					hintsList.set(i, hintsList.get(i).replaceAll("\\s+|,", ""));
 					if (stopWords.contains(hintsList.get(i).toLowerCase())) {
 						// They used a stopWord
-						result.add(new SpeechAction(
-								groupB + " used " + hintsList.get(i).toLowerCase() + " which is a word that was not allowed. The other team will get a point."));
+						result.add(new SpeechAction(groupB + " used " + hintsList.get(i).toLowerCase()
+								+ " which is a word that was not allowed. The other team will get a point."));
 						result.add(new EmotionAction("sad"));
 						addPoint(GROUP_A);
 						result.add(new SpeechAction("Do you want to play antoher round?"));
@@ -363,9 +362,7 @@ public class GuessingGamePersonality implements Personality {
 	}
 
 	private Association getAssociations(String object) {
-		// String[] arr = new String[3];
 		String[] arrNouns, arrVerbs, arrAdj;
-		// String strPython;
 		// read Files in /ratings
 		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt";
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -380,16 +377,6 @@ public class GuessingGamePersonality implements Personality {
 			e1.printStackTrace();
 			return null;
 		}
-		/*
-		 * strPython =
-		 * "Macintosh Cider Pear Plum Orchard Peach Pie Atari App Os Raspberry Pineapple Raisin Blossom Samsung Strawberry Juice Fiona Cherry Amiga Cultivar Cinnamon Mango Melon Grape Banana Mac Pudding Discord Fruit Beatles Turnip Chestnut Sauce Lemon Cucumber Crab Safari Cabbage Almond Ibm Carrot Adam Dessert Commodore Laptop Slice Beet Intel Bough Potato Jelly Pumpkin Adobe Keynote Syrup Vinegar Android Flavour Butter Onion Nokia Mulberry Heracles Bake Lime Nut Gui Orange Aphrodite Pc Hera Peel Grower Seedling Flavor Pea Tomato Candy Processor Dos\n"
-		 * +
-		 * "Cherry Android Ripe Desktop Sour Roast Citrus Plum Stereo Roasted Rotten Peeled\n"
-		 * + "Bake Bob Pare Slice Port Chop Infringe";
-		 * 
-		 * arr = strPython.split("\\n"); arrNouns = arr[0].split("\\s+");
-		 * arrVerbs = arr[1].split("\\s+"); arrAdj = arr[2].split("\\s+");
-		 */
 		Association objAssociations = new Association(Arrays.asList(arrNouns), Arrays.asList(arrVerbs),
 				Arrays.asList(arrAdj));
 		return objAssociations;
