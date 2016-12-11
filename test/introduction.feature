@@ -16,5 +16,6 @@ Feature: Introduction
       """
     Then Roboy says
       """
-      Welcome Team Number One
+      Group 1 will now be called Number One
+      Group 2, please tell me the name of your group.
       """
