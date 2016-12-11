@@ -29,10 +29,9 @@ class Roboy:
     def write(self, sentence, imagenet=None):
         imagenet = imagenet if imagenet is not None else {}
         res = []
-        res += {'text': sentence}
-        res += {'imagenet': imagenet}
-
-        return self.process.stdin.write("{0}\n".format(res.dump()))
+        res.append({'text': sentence})
+        res.append({'imagenet': imagenet})
+        return self.process.stdin.write(bytes("{0}\n\n".format(json.dumps(res)), 'utf-8'))
 
     def ask(self, question, imagenet=None):
         self.write(sentence)

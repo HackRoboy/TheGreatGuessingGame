@@ -5,17 +5,10 @@ Feature: Introduction
     Then Roboy says
       """
       Welcome to the Guessing Game with Roboy
+      Group 1, please tell me the name of your group.
       """
 
-  Scenario: Roboy Welcomes Groups
-    When the Roboy welcomed everybody
-    Then Roboy says
-      """
-      Please tell first Group Name
-      """
-
-  @skip
-  Scenario:
+  Scenario: Ask for first Group
     Given Roboy asks for first Group Name
     When I say
       """
