@@ -1,5 +1,11 @@
 package de.roboy.dialog.personality;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -156,6 +162,15 @@ public class GuessingGamePersonality implements Personality {
 						// call python script to get associations and process
 						// them
 						association = getAssociations(term);
+						if (association == null) {
+							result.add(new SpeechAction(
+									"I'm sorry but I don't know what " + sentence.getInput() + " is."));
+							result.add(new EmotionAction("sad"));
+							result.add(new SpeechAction(
+									"Let me try again. Please tell me the object yout want me to guess."));
+							state = GuessingGameState.REGISTER_STOP_WORDS;
+							return result;
+						}
 						result.add(
 								new SpeechAction("I see " + term + ". But I will forget that you told me what it is."));
 						result.add(new EmotionAction("happy"));// TODO make him
@@ -193,7 +208,7 @@ public class GuessingGamePersonality implements Personality {
 				stopWords.add(term);
 				String allStopWords = term;
 				for (int i = 0; i < arr.length; ++i) {
-					arr[i] = arr[i].replaceAll("\\s+|,", "");
+					arr[i] = arr[i].replaceAll("\\s+|,", "").toLowerCase();
 					stopWords.add(arr[i]);
 					allStopWords = allStopWords + ", " + arr[i];
 				}
@@ -225,10 +240,10 @@ public class GuessingGamePersonality implements Personality {
 				List<String> hintsList = Arrays.asList(sentence.getInput().split("\\s+"));
 				for (int i = 0; i < hintsList.size(); ++i) {
 					hintsList.set(i, hintsList.get(i).replaceAll("\\s+|,", ""));
-					if (stopWords.contains(hintsList.get(i))) {
+					if (stopWords.contains(hintsList.get(i).toLowerCase())) {
 						// They used a stopWord
 						result.add(new SpeechAction(
-								groupA + " used a word that was not allowed. The other team will get a point."));
+								groupA + " used " + hintsList.get(i).toLowerCase() + " which is a word that was not allowed. The other team will get a point."));
 						result.add(new EmotionAction("sad"));
 						addPoint(GROUP_B);
 						result.add(new SpeechAction("Do you want to play antoher round?"));
@@ -278,10 +293,10 @@ public class GuessingGamePersonality implements Personality {
 				List<String> hintsList = Arrays.asList(sentence.getInput().split("\\s+"));
 				for (int i = 0; i < hintsList.size(); ++i) {
 					hintsList.set(i, hintsList.get(i).replaceAll("\\s+|,", ""));
-					if (stopWords.contains(hintsList.get(i))) {
+					if (stopWords.contains(hintsList.get(i).toLowerCase())) {
 						// They used a stopWord
 						result.add(new SpeechAction(
-								groupB + " used a word that was not allowed. The other team will get a point."));
+								groupB + " used " + hintsList.get(i).toLowerCase() + " which is a word that was not allowed. The other team will get a point."));
 						result.add(new EmotionAction("sad"));
 						addPoint(GROUP_A);
 						result.add(new SpeechAction("Do you want to play antoher round?"));
@@ -348,19 +363,33 @@ public class GuessingGamePersonality implements Personality {
 	}
 
 	private Association getAssociations(String object) {
-		String[] arr = new String[3];
+		// String[] arr = new String[3];
 		String[] arrNouns, arrVerbs, arrAdj;
-		String strPython;
-		// call python script; python script returns String with 3 Lines ->
-		// separate by \\n?
-		strPython = "Macintosh Cider Pear Plum Orchard Peach Pie Atari App Os Raspberry Pineapple Raisin Blossom Samsung Strawberry Juice Fiona Cherry Amiga Cultivar Cinnamon Mango Melon Grape Banana Mac Pudding Discord Fruit Beatles Turnip Chestnut Sauce Lemon Cucumber Crab Safari Cabbage Almond Ibm Carrot Adam Dessert Commodore Laptop Slice Beet Intel Bough Potato Jelly Pumpkin Adobe Keynote Syrup Vinegar Android Flavour Butter Onion Nokia Mulberry Heracles Bake Lime Nut Gui Orange Aphrodite Pc Hera Peel Grower Seedling Flavor Pea Tomato Candy Processor Dos\n"
-				+ "Cherry Android Ripe Desktop Sour Roast Citrus Plum Stereo Roasted Rotten Peeled\n"
-				+ "Bake Bob Pare Slice Port Chop Infringe";
-
-		arr = strPython.split("\\n");
-		arrNouns = arr[0].split("\\s+");
-		arrVerbs = arr[1].split("\\s+");
-		arrAdj = arr[2].split("\\s+");
+		// String strPython;
+		// read Files in /ratings
+		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt";
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			arrNouns = br.readLine().split("\\s+");
+			arrVerbs = br.readLine().split("\\s+");
+			arrAdj = br.readLine().split("\\s+");
+			br.close();
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+			return null;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+		/*
+		 * strPython =
+		 * "Macintosh Cider Pear Plum Orchard Peach Pie Atari App Os Raspberry Pineapple Raisin Blossom Samsung Strawberry Juice Fiona Cherry Amiga Cultivar Cinnamon Mango Melon Grape Banana Mac Pudding Discord Fruit Beatles Turnip Chestnut Sauce Lemon Cucumber Crab Safari Cabbage Almond Ibm Carrot Adam Dessert Commodore Laptop Slice Beet Intel Bough Potato Jelly Pumpkin Adobe Keynote Syrup Vinegar Android Flavour Butter Onion Nokia Mulberry Heracles Bake Lime Nut Gui Orange Aphrodite Pc Hera Peel Grower Seedling Flavor Pea Tomato Candy Processor Dos\n"
+		 * +
+		 * "Cherry Android Ripe Desktop Sour Roast Citrus Plum Stereo Roasted Rotten Peeled\n"
+		 * + "Bake Bob Pare Slice Port Chop Infringe";
+		 * 
+		 * arr = strPython.split("\\n"); arrNouns = arr[0].split("\\s+");
+		 * arrVerbs = arr[1].split("\\s+"); arrAdj = arr[2].split("\\s+");
+		 */
 		Association objAssociations = new Association(Arrays.asList(arrNouns), Arrays.asList(arrVerbs),
 				Arrays.asList(arrAdj));
 		return objAssociations;
