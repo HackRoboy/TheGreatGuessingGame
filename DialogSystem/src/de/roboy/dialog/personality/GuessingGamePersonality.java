@@ -266,14 +266,10 @@ public class GuessingGamePersonality implements Personality {
 					outputEdison = 1;
 				}
 
-				String command = ".." + File.separator + "display_client.py"; // TODO
-																				// insert
-				// pythonscript path
-				// here
-				String message = "message=" + groupA + ": " + String.format("%4.3f", (probTeamA / POINT_BORDER) + "    |" + groupB
-						+ String.format("%4.3f", (probTeamB / POINT_BORDER)) + "     |";
+				String command = ".." + File.separator + "display_client.py";
 				String[] envArgs = new String[2];
-				envArgs[0] = message;
+				envArgs[0] = "message=" + groupA + ": " + String.format("%4.3f", (probTeamA / POINT_BORDER) + "    |" + groupB
+                        + String.format("%4.3f", (probTeamB / POINT_BORDER)) + "     |";
 				envArgs[1] = "color=99 17 27";
 				// TODO color
 
