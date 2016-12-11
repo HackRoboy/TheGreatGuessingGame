@@ -8,7 +8,7 @@ class Roboy:
     def start(self):
         from subprocess import Popen, PIPE
 
-        self.process = Popen(self.command, stdout=PIPE, stdin=PIPE)
+        self.process = Popen(self.command, bufsize=10000, stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
     def stop(self):
         try:
@@ -31,7 +31,8 @@ class Roboy:
         res = []
         res.append({'text': sentence})
         res.append({'imagenet': imagenet})
-        return self.process.stdin.write(bytes("{0}\n\n".format(json.dumps(res)), 'utf-8'))
+        self.process.stdin.write(bytes("{0}\n".format(json.dumps(res)), 'utf-8'))
+        self.process.stdin.flush()
 
     def ask(self, question, imagenet=None):
         self.write(sentence)
