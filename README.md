@@ -12,3 +12,9 @@ Try to play it with
 ```
 rake game
 ```
+
+## How the game works?
+
+Two human teams compete against each other in describing objects Roboy currently sees.
+They are not allowed to describe the object by the word itself and by a set of prior defined stop words.
+The team who describes the object the best, wins a point. A team who uses a stop word, losses a point.
