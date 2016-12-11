@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     for word in args.words:
+        word = word.lower()
         import os
         pathname = 'ratings/{0}.txt'.format(word)
         if os.path.exists(pathname):

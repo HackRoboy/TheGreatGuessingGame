@@ -9,7 +9,7 @@ task gen: 'build/extraction.weights'
 task :format do
   options = []
   options.push '--replace' if ENV['repair']
-  sh "gherkin_format #{options.join ' '} features/*.feature"
+  sh "gherkin_format #{options.join ' '} test/*.feature"
 end
 
 task run: 'DialogSystem/DialogSystem.jar' do
@@ -41,7 +41,7 @@ end
 desc 'Tests the Application'
 task :test => :gen do
   ENV['sut'] = run_command
- 
+
   options = []
   options << '--stop' if ENV['stop']
   options << '--tags ~skip'
@@ -52,7 +52,7 @@ task :game => :gen do
   puts "Command: #{run_command}"
   ENV['command'] = run_command
   ENV['PYTHONPATH'] = 'src'
-  
+
   #sh 'PYTHONPATH=src python3 src/roboy/guessing_game.py'
   sh 'python3 src/roboy/guessing_game.py'
 end
