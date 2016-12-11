@@ -33,7 +33,7 @@ public class GuessingGamePersonality implements Personality {
 
 	private final static int GROUP_A = 0;
 	private final static int GROUP_B = 1;
-	private final static double POINT_BORDER = 1; // TODO set border
+	private final static double POINT_BORDER = 6; // TODO set border
 	private GuessingGameState state = GuessingGameState.WELCOME;
 	private String groupA = "";
 	private String groupB = "";

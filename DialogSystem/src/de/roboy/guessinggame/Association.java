@@ -29,7 +29,7 @@ public class Association {
 			} else {
 				continue;
 			}
-			result += 1 - (position / length);
+			result += 1;
 		}
 		//result = result / hints.size();
 		return result;
