@@ -59,7 +59,7 @@ public class GuessingGamePersonality implements Personality {
 		switch (state) {
 		case WELCOME:
 			// TODO more introduction to the game
-			result.add(new SpeechAction("Welcome to the Guessing Game with Roboy"));
+			result.add(new SpeechAction("Welcome to the Guessing Game with Roboy. "));
 			state = GuessingGameState.REGISTER_GROUP_A;
 			// return result;
 		case REGISTER_GROUP_A:
@@ -251,6 +251,25 @@ public class GuessingGamePersonality implements Personality {
 					}
 				}
 				double prob = association.getProbability(hintsList);
+				/*
+				// TODO set envVariables message='line1|line2' and color='42 23 12'
+				// calculate an output for edison (0-1 how close they got);
+				// call python script to send it to edison
+				double outputEdison = prob / POINT_BORDER;
+				if (outputEdison > 1) {
+					outputEdison = 1;
+				}
+				String pythonOutputEdison = "./display_client"; // TODO insert pythonscript path
+												// here
+				if (!pythonOutputEdison.equals("")) {
+					try {
+						Runtime.getRuntime().exec(pythonOutputEdison);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				*/
+
 				if (prob < POINT_BORDER) {
 					// score too low
 					if (!groupAsTurnFirst) {
@@ -364,7 +383,7 @@ public class GuessingGamePersonality implements Personality {
 	private Association getAssociations(String object) {
 		String[] arrNouns, arrVerbs, arrAdj;
 		// read Files in /ratings
-		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt";
+		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt"; //TODO change path
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			arrNouns = br.readLine().split("\\s+");
 			arrVerbs = br.readLine().split("\\s+");
