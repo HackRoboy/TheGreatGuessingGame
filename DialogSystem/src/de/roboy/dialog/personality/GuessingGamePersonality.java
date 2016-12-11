@@ -33,7 +33,7 @@ public class GuessingGamePersonality implements Personality {
 
 	private final static int GROUP_A = 0;
 	private final static int GROUP_B = 1;
-	private final static double POINT_BORDER = 6; // TODO set border
+	private final static double POINT_BORDER = 6.0; // TODO set border
 	private GuessingGameState state = GuessingGameState.WELCOME;
 	private String groupA = "";
 	private String groupB = "";
@@ -47,6 +47,8 @@ public class GuessingGamePersonality implements Personality {
 										// 2: Adjectives
 	private int pointsA = 0;
 	private int pointsB = 0;
+	private double probTeamA = 0;
+	private double probTeamB = 0;
 
 	@Override
 	public List<Action> answer(Interpretation input) {
@@ -59,7 +61,7 @@ public class GuessingGamePersonality implements Personality {
 		switch (state) {
 		case WELCOME:
 			// TODO more introduction to the game
-			result.add(new SpeechAction("Welcome to the Guessing Game with Roboy"));
+			result.add(new SpeechAction("Welcome to the Guessing Game with Roboy. "));
 			state = GuessingGameState.REGISTER_GROUP_A;
 			// return result;
 		case REGISTER_GROUP_A:
@@ -122,6 +124,8 @@ public class GuessingGamePersonality implements Personality {
 						result.add(new SpeechAction(
 								"Let's play another round. Please tell me the object yout want me to guess."));
 						term = "";
+						probTeamA = 0;
+						probTeamB = 0;
 						state = GuessingGameState.REGISTER_STOP_WORDS;
 						return result;
 					} else if (sentence.getInput().toLowerCase().contains("no")) {
@@ -250,8 +254,35 @@ public class GuessingGamePersonality implements Personality {
 						return result;
 					}
 				}
-				double prob = association.getProbability(hintsList);
-				if (prob < POINT_BORDER) {
+				probTeamA = association.getProbability(hintsList);
+
+				// TODO set envVariables message='line1|line2' and
+				// (optional)color='42 23 12'
+				// calculate an output for edison (0-1 how close they got);
+				// call python script to send it to edison
+
+				double outputEdison = probTeamA / POINT_BORDER;
+				if (outputEdison > 1) {
+					outputEdison = 1;
+				}
+
+				String command = ".." + File.separator + "display_client.py";
+				String[] envArgs = new String[2];
+				envArgs[0] = "message=" + groupA + ": " + String.format("%4.3f", (probTeamA / POINT_BORDER) + "    |" + groupB
+                        + String.format("%4.3f", (probTeamB / POINT_BORDER)) + "     |";
+				envArgs[1] = "color=99 17 27";
+				// TODO color
+
+				if (!command.equals("")) {
+					try {
+						Runtime.getRuntime().exec(command, envArgs);
+						System.out.println("Ran python");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				if (probTeamA < POINT_BORDER) {
 					// score too low
 					if (!groupAsTurnFirst) {
 						// groupB started this round -> nobody answered right
@@ -303,8 +334,8 @@ public class GuessingGamePersonality implements Personality {
 						return result;
 					}
 				}
-				double prob = association.getProbability(hintsList);
-				if (prob < POINT_BORDER) {
+				probTeamB = association.getProbability(hintsList);
+				if (probTeamB < POINT_BORDER) {
 					// score too low
 					if (!groupAsTurnFirst) {
 						// groupB started this round -> groupAs turn now
@@ -364,7 +395,9 @@ public class GuessingGamePersonality implements Personality {
 	private Association getAssociations(String object) {
 		String[] arrNouns, arrVerbs, arrAdj;
 		// read Files in /ratings
-		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt";
+		String filePath = ".." + File.separator + "ratings" + File.separator + object.toLowerCase() + ".txt"; // TODO
+																												// change
+																												// path
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			arrNouns = br.readLine().split("\\s+");
 			arrVerbs = br.readLine().split("\\s+");
